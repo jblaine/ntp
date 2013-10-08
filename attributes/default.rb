@@ -22,9 +22,15 @@
 #
 
 # default attributes for all platforms
-default['ntp']['servers']   = []
-default['ntp']['peers'] = []
+default['ntp']['servers']      = []
+default['ntp']['peers']        = []
 default['ntp']['restrictions'] = []
+default['ntp']['servers']      = [
+                                  '0.pool.ntp.org',
+                                  '1.pool.ntp.org',
+                                  '2.pool.ntp.org',
+                                  '3.pool.ntp.org'
+                                  ]
 
 # internal attributes
 default['ntp']['packages'] = %w(ntp ntpdate)

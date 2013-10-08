@@ -40,16 +40,6 @@ else
   end
 end
 
-unless node['ntp']['servers'].size > 0
-  node.default['ntp']['servers'] = [
-    '0.pool.ntp.org',
-    '1.pool.ntp.org',
-    '2.pool.ntp.org',
-    '3.pool.ntp.org'
-  ]
-  log 'No NTP servers specified, using default ntp.org server pools'
-end
-
 template node['ntp']['conffile'] do
   source   'ntp.conf.erb'
   owner    node['ntp']['conf_owner']
