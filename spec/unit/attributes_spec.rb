@@ -168,4 +168,20 @@ describe 'ntp attributes' do
       expect(ntp['var_group']).to eq('wheel')
     end
   end
+
+  describe 'on the Solaris2 platform version 5.10' do
+    let(:chef_run) { ChefSpec::ChefRunner.new(platform: 'solaris2', version: '5.10').converge('ntp::default') }
+
+    it 'sets the conf file to /etc/inet/ntp.conf' do
+      expect(ntp['conffile']).to eq('/etc/inet/ntp.conf')
+    end
+
+    it 'sets the service name to ntp' do
+      expect(ntp['service']).to eq('ntp')
+    end
+
+    it 'sets the package list to empty' do
+      expect(ntp['packages']).to eq([])
+    end
+  end
 end
