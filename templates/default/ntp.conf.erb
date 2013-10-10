@@ -21,7 +21,7 @@ filegen clockstats file clockstats type day enable
 <%   node['ntp']['peers'].each do |ntppeer| -%>
 <%#    Don't peer with ourself %>
 <%     if node['ipaddress'] != ntppeer && node['fqdn'] != ntppeer -%>
-<%    -%>peer <%= ntppeer %> iburst
+<%    -%>peer <%= ntppeer %> <%= node['ntp']['peer_flags'] %>
 <%    -%>restrict <%= ntppeer %> nomodify
 <%     end -%>
 <%   end -%>
@@ -33,15 +33,13 @@ filegen clockstats file clockstats type day enable
 <% ( node['ntp']['servers'] - node['ntp']['peers'] ).each do |ntpserver| -%>
 <%#   Loop through defined servers, but don't try to upstream ourself %>
 <%   if node['ipaddress'] != ntpserver and node['fqdn'] != ntpserver -%>
-<%  -%>server <%= ntpserver %> iburst
-<%  -%>restrict <%= ntpserver %> nomodify notrap noquery
+<%  -%>server <%= ntpserver %> <%= node['ntp']['server_flags'] %>
 <%   end -%>
 <% end -%>
 
-restrict default kod notrap nomodify nopeer noquery
-restrict 127.0.0.1 nomodify
-restrict -6 default kod notrap nomodify nopeer noquery
-restrict -6 ::1 nomodify
+<% node['ntp']['base_restrictions'].each do |restriction| -%>
+<%  -%>restrict <%= restriction %>
+<% end -%>
 
 <%# If this is a server with additional LAN restriction lines, put them here %>
 <% unless node['ntp']['restrictions'].empty? -%>
